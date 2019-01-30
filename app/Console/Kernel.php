@@ -13,7 +13,11 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        # swoole
+        Commands\Swoole\TcpServer::class,
+        Commands\Swoole\TcpClient::class,
+        Commands\Swoole\HttpServer::class,
+        Commands\Swoole\WebSocketServer::class,
     ];
 
     /**
