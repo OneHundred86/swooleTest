@@ -187,6 +187,21 @@
                 send();
             });
 
+            // 定时发送心跳包
+            setInterval(function () {
+                console.log('interval');
+
+                if(websocket.readyState!=1){
+                    console.log('websocket未连接');
+                    return;
+                }
+
+                var msg = {
+                    type: 'heartbeat',
+                };
+                websocket.send(JSON.stringify(msg));
+            }, 5000);
+
         }
         else {
             alert('该浏览器不支持web socket');
