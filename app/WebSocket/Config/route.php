@@ -9,3 +9,4 @@ Route::group(['UserAuth'], function(){
     Route::add('user', 'msg');
 });
 
+Route::add('system', 'broadcast', ['SystemAuth']);

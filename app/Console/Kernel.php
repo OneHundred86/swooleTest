@@ -21,6 +21,7 @@ class Kernel extends ConsoleKernel
         Commands\Swoole\WebSocketServer1::class,
         Commands\Swoole\ProcessPool::class,
         Commands\Swoole\Coroutine::class,
+        Commands\WebSocketClient::class,
     ];
 
     /**
