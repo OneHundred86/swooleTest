@@ -13,6 +13,10 @@ class IndexController extends Controller
   public function chatPage(){
     return view('chat');
   }
+
+  public function chat1Page(){
+    return view('chat1');
+  }
 }
 
 

@@ -4,7 +4,7 @@ https://github.com/swoole/swoole-src
 
 ###### 2、启动websocket服务
 
-`php artisan swoole:websocket_server`
+`php artisan swoole:websocket_server1`
 
 ###### 3、配置nginx
 
@@ -23,6 +23,6 @@ https://github.com/swoole/swoole-src
 
 
 
-###### 4、然后访问 /chat 可以进入聊天室
+###### 4、然后访问 /chat1 可以进入聊天室
 
 5、todo

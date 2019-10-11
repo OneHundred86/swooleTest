@@ -13,3 +13,26 @@
 
 Route::get('/', 'IndexController@indexPage');
 Route::get('/chat', 'IndexController@chatPage');
+Route::get('/chat1', 'IndexController@chat1Page');
+
+
+
+// private api
+Route::group(
+  [
+    'middleware' => 'privateApi',
+    'prefix' => 'private',
+  ],
+  function(){
+    Route::post('/site/app/list', 'SiteAppController@lists');
+
+    Route::group(
+      [
+        'middleware' => 'm1',
+      ],
+      function(){
+        Route::post('/m1/t', 'SiteAppController@xxx');
+      }
+    );
+  }
+);

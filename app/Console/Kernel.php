@@ -18,6 +18,7 @@ class Kernel extends ConsoleKernel
         Commands\Swoole\TcpClient::class,
         Commands\Swoole\HttpServer::class,
         Commands\Swoole\WebSocketServer::class,
+        Commands\Swoole\WebSocketServer1::class,
         Commands\Swoole\ProcessPool::class,
         Commands\Swoole\Coroutine::class,
     ];
