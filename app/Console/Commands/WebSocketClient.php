@@ -80,7 +80,7 @@ class WebSocketClient extends Command
         $url = 'ws://my.swoole:8080/ws/';
         $client = new Client($url);
 
-        $app = 'testSystemAuth0';
+        $app = 'testSystemAuth';
         $ticket = 'testSystemAuth-123456';
 
         $packet = [
