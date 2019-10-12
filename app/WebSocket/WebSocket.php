@@ -47,12 +47,10 @@ class WebSocket
     }
 
     public static function onOpen(\Swoole\WebSocket\Server $ws, $request) {
-        // var_dump($request->fd, $request->get, $request->server);
         echo sprintf('%s connected: %s', date('Y-m-d H:i:s'), $request->fd) . PHP_EOL;
     }
 
     public static function onMessage(\Swoole\WebSocket\Server $ws, \Swoole\WebSocket\Frame $frame) {
-        // var_dump($frame); echo PHP_EOL . PHP_EOL;
         echo sprintf('%s recv message from %s: %s', date('Y-m-d H:i:s'), $frame->fd, $frame->data) . PHP_EOL;
 
         # 消息处理

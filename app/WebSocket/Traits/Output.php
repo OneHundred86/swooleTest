@@ -54,18 +54,21 @@ trait Output
     // 直接返回数据包到当前套接字
     # errcode : int|mix  0成功，其他数字表示错误
     # data : mix
+    # => true
     public function o($errcode = ErrorCode::OK, $errmessage = null, $data = null){
         $c = isset($this->frame->_obj->c) ? $this->frame->_obj->c : null;
         $a = isset($this->frame->_obj->a) ? $this->frame->_obj->a : null;
         return $this->send($this->frame->fd, $c, $a, $errcode, $errmessage, $data);
     }
 
+    # => false
     public function e($errcode = ErrorCode::ERROR, $errmessage = null, $data = null){
         if(!is_integer($errcode)){
             $errmessage = $errcode;
             $errcode = ErrorCode::ERROR;
         }
 
-        return $this->o($errcode, $errmessage, $data);
+        $this->o($errcode, $errmessage, $data);
+        return false;
     }
 }

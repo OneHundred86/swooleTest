@@ -13,19 +13,16 @@ class SystemAuth extends Middleware
         $app = $io->i('app');
         $token = $io->i('token');
         if(empty($app) || empty($token)){
-            $io->e('鉴权参数缺失');
-            return false;
+            return $io->e('鉴权参数缺失');
         }
 
         if($app != 'testSystemAuth'){
-            $io->e('app不存在');
-            return false;
+            return $io->e('app不存在');
         }
 
         $ticket = 'testSystemAuth-123456';
         if(md5(sprintf('%s-%s', $app, $ticket)) != $token){
-            $io->e('token验证失败');
-            return false;
+            return $io->e('token验证失败');
         }
 
         return true;

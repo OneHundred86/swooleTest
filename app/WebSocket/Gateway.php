@@ -26,6 +26,7 @@ class Gateway
             return $io->e(ErrorCode::INVALID_MSG);
         }
 
+        # 路由
         list($controller, $action, $middlewares) = Route::route($c, $a);
 
         # 中间件验证
@@ -39,10 +40,16 @@ class Gateway
             }
         }
 
-        # 
-        $class_c = "App\\WebSocket\\Controller\\$controller";
+        # 处理消息
+        $class_c = sprintf('App\WebSocket\Controller\%s', $controller);
+        if(!class_exists($class_c))
+            throw new \Exception(sprintf('class not found: %s', $class_c), 1);
+            
         $obj_c = new $class_c($io);
-        
+
+        if(!method_exists($obj_c, $action))
+            throw new \Exception(sprintf('method not found: %s::%s', $class_c, $action), 1);
+            
         return $obj_c->$action($io);
     }
 
