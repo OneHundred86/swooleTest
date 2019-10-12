@@ -44,55 +44,55 @@ class WebSocketClient extends Command
     }
 
     protected function test0(){
-        $url = 'ws://my.swoole:8080/ws/';
-        $client = new Client($url);
-        $client->send('test');
-
         try {
+            $url = 'ws://my.swoole:8080/ws/';
+            $client = new Client($url);
+
+            $client->send('test');
             echo $client->receive() . PHP_EOL;
+
+            $client->close();
         } catch (\Exception $e){
             echo sprintf('接受消息失败:%s', $e->getMessage()) . PHP_EOL;
         }
-
-        $client->close();
     }
 
     protected function test1(){
-        $url = 'ws://my.swoole:8080/ws/';
-        $client = new Client($url);
-
-        $packet = [
-            'c' => 'system',
-            'a' => 'test',
-        ];
-        $client->send(json_encode($packet));
-
         try {
+            $url = 'ws://my.swoole:8080/ws/';
+            $client = new Client($url);
+
+            $packet = [
+                'c' => 'system',
+                'a' => 'test',
+            ];
+            $client->send(json_encode($packet));
+
             echo $client->receive() . PHP_EOL;
+
+            $client->close();
         } catch (\Exception $e) {
             echo sprintf('接受消息失败:%s', $e->getMessage()) . PHP_EOL;
         }
-
-        $client->close();
     }
 
     protected function testPrivate(){
-        $url = 'ws://my.swoole:8080/ws/';
-        $client = new Client($url);
-
-        $app = 'testSystemAuth';
-        $ticket = 'testSystemAuth-123456';
-
-        $packet = [
-            'c' => 'system',
-            'a' => 'broadcast',
-            'msg' => '大家好，这是系统广播的消息',
-            'app' => $app,
-            'token' => md5(sprintf('%s-%s', $app, $ticket)),
-        ];
-        $client->send(json_encode($packet));
-
         try {
+            $url = 'ws://my.swoole:8080/ws/';
+            $client = new Client($url);
+
+            $app = 'testSystemAuth';
+            $ticket = 'testSystemAuth-123456';
+
+            $packet = [
+                'c' => 'system',
+                'a' => 'broadcast',
+                'msg' => '大家好，这是系统广播的消息',
+                'app' => $app,
+                'token' => md5(sprintf('%s-%s', $app, $ticket)),
+            ];
+            $client->send(json_encode($packet));
+
             $ret = $client->receive();
             $json = json_decode($ret);
 
@@ -103,10 +103,10 @@ class WebSocketClient extends Command
             }else{
                 echo '发送成功' . PHP_EOL;
             }
+
+            $client->close();
         } catch (\Exception $e) {
             echo sprintf('接受消息失败:%s', $e->getMessage()) . PHP_EOL;
         }
-
-        $client->close();
     }
 }
