@@ -38,70 +38,85 @@ class Coroutine extends Command
      */
     public function handle()
     {
-        // $this->demo1();
-        $this->demo2();
+        $this->demo1();
+        // $this->demo2();
     }
 
     /*
     # 执行结果:
-    start coro 1
+    start coroutine 1
     start to resume 1 @1
-    resume coro 1 @1
+    resume coroutine 1 @1
     start to resume 1 @2
-    resume coro 1 @2
+    resume coroutine 1 @2
     main
     */
     public function demo1(){
         $id = go(function(){    # go相当于co::create
             $id = co::getUid();
-            echo "start coro $id\n";
-            co::suspend();
-            echo "resume coro $id @1\n";
-            co::suspend();
-            echo "resume coro $id @2\n";
+            echo "start coroutine $id\n";
+            co::suspend();  # 携程挂起
+            echo "resume coroutine $id @1\n";
+            co::suspend();  # 携程挂起
+            echo "resume coroutine $id @2\n";
         });
 
         echo "start to resume $id @1\n";
-        co::resume($id);
+        co::resume($id);    # 携程恢复
         echo "start to resume $id @2\n";
-        co::resume($id);
+        co::resume($id);    # 携程恢复
+
         echo "main\n";
     }
 
     public function demo2(){
-        var_dump(co::stats());
-        
+        define('STOP_CODE', -1);
         $channel = new co\Channel();
 
-        # 消费者协程
+        # 消费者协程1
         co::create(function() use ($channel){
-            echo 'consumer start' . PHP_EOL;
+            echo 'consumer 1 start' . PHP_EOL;
             while(true){
-                $data = $channel->pop();
-                echo 'coroutine get data:' . PHP_EOL;
-                var_dump($data);
-                echo PHP_EOL . PHP_EOL;
+                $data = $channel->pop();    # 如果没有数据，会导致协程挂起
+                echo "coroutine 1 get data: $data" . PHP_EOL;
+
+                if($data === STOP_CODE)
+                    break;
             }
 
-            echo 'consumer stop' . PHP_EOL;
+            echo 'consumer 1 stop' . PHP_EOL;
+        });
+
+        # 消费者协程2
+        co::create(function() use ($channel){
+            echo 'consumer 2 start' . PHP_EOL;
+            while(true){
+                $data = $channel->pop();    # 如果没有数据，会导致协程挂起
+                echo "coroutine 2 get data: $data" . PHP_EOL;
+
+                if($data === STOP_CODE)
+                    break;
+            }
+
+            echo 'consumer 2 stop' . PHP_EOL;
         });
 
         # 生产者协程
         co::create(function() use ($channel){
             echo 'producer start' . PHP_EOL;
-            while(true) {
-                $d = $this->ask('send data to coroutine:');
-                if($d === null)
-                    break;
-
-                $channel->push($d);
+            
+            for ($i=1; $i <= 100; $i++) {
+                $channel->push($i); # 如果数据满了，会导致协程挂起
             }
+
+            # 使携程结束
+            $channel->push(STOP_CODE);
+            $channel->push(STOP_CODE);
 
             echo 'producer stop' . PHP_EOL;
         });
 
-        var_dump(co::stats());
-        // swoole_event::wait();
+        \swoole_event::wait();
     }
 }
 
