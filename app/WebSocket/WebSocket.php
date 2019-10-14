@@ -38,8 +38,7 @@ class WebSocket
         });
 
         # 注册路由
-        // Route::register();
-        include_once('app/WebSocket/Config/route.php');
+        include_once(__DIR__.'/Config/route.php');
 
         self::init($ws);
 
